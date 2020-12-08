@@ -8,11 +8,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 class TodoClients {
     companion object {
         private const val Base_url = "https://jsonplaceholder.typicode.com/"
-        private const val base_url_api = "$Base_url/todos/"
+//        private const val base_url_api = "$Base_url/todos/"
 
         val service: TodoService by lazy {
             val retrofit = Retrofit.Builder()
-                .baseUrl(base_url_api)
+                .baseUrl(Base_url)
                 .addConverterFactory(
                     GsonConverterFactory.create(
                         GsonBuilder().setLenient().create()

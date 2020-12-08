@@ -1,7 +1,9 @@
 package com.example.crudmvvm.viewmodels
 
 import androidx.lifecycle.*
+import com.example.crudmvvm.model.TodoModel
 import com.example.crudmvvm.model.toModel
+import com.example.crudmvvm.model.toRequest
 import com.example.crudmvvm.repository.TodoRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,6 +28,19 @@ class getTodoViewModel (private val repository: TodoRepository): ViewModel(),
             }
         }
     }
+    fun insertTodo(todoModel: TodoModel) {
+        mutabaleState.value = StatesTodo.Loading()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val todoResponse = repository.insertTodo(todoModel.toRequest())
+                val todo = todoResponse.toModel()
+                mutabaleState.postValue(StatesTodo.SuccessInsert(todo))
+            } catch (exc: Exception) {
+                onError(exc)
+            }
+        }
+    }
 
     private fun onError(ex: Exception) {
         ex.printStackTrace()
@@ -34,6 +49,6 @@ class getTodoViewModel (private val repository: TodoRepository): ViewModel(),
     }
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        TODO("Not yet implemented")
+       return getTodoViewModel(repository)as T
     }
 }

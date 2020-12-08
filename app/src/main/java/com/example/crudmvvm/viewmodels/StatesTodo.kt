@@ -8,5 +8,6 @@ sealed class StatesTodo {
     data class Loading(val message: String = "mohon tonggu"): StatesTodo()
     data class error(val exception: Exception) : StatesTodo()
     data class  SucceseGetTodo(val list: List<TodoModel>): StatesTodo()
+    data class SuccessInsert(val todo: TodoModel): StatesTodo()
 
 }

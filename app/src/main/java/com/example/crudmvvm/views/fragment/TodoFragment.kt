@@ -9,15 +9,14 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.crudmvvm.databinding.FragmentTodoBinding
+import com.example.crudmvvm.model.TodoModel
 import com.example.crudmvvm.repository.TodoRepository
 import com.example.crudmvvm.repository.TodoRepositoryImpl
 import com.example.crudmvvm.repository.clients.TodoClients
-import com.example.crudmvvm.repository.services.TodoService
 import com.example.crudmvvm.viewmodels.StatesTodo
 import com.example.crudmvvm.viewmodels.TodoModelFactory
 import com.example.crudmvvm.viewmodels.getTodoViewModel
 import com.example.crudmvvm.views.adapter.TodoAdapter
-import kotlinx.android.synthetic.main.fragment_todo.*
 
 
 class TodoFragment : Fragment() {
@@ -27,7 +26,7 @@ class TodoFragment : Fragment() {
     private val adapter by lazy { TodoAdapter(requireContext()) }
     private val service by lazy { TodoClients.service }
     private val remoteRepo: TodoRepository by lazy { TodoRepositoryImpl(service) }
-    private val viewModelFactory by lazy { getTodoViewModel(remoteRepo) }
+    private val viewModelFactory by lazy { TodoModelFactory(remoteRepo) }
     private val viewModel by viewModels<getTodoViewModel> { viewModelFactory }
 
     override fun onCreateView(
@@ -54,7 +53,21 @@ class TodoFragment : Fragment() {
                         adapter.list = it.list.toMutableList()
 
                     }
+                    is StatesTodo.SuccessInsert ->{
+                        showLoading(false)
+                        adapter.insertTodo(it.todo)
+                        tieTambah.setText("")
+                    }
                     else -> throw Exception("Unsupported  state type")
+                }
+            }
+            btnTambah.setOnClickListener {
+                if(tieTambah.text.toString().isNotEmpty()){
+                    viewModel.insertTodo(
+                        TodoModel(id =
+
+                        )
+                    )
                 }
             }
         }

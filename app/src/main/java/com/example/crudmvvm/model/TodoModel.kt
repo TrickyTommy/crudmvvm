@@ -1,5 +1,7 @@
 package com.example.crudmvvm.model
 
+import com.example.crudmvvm.repository.request.TodoRequest
+
 data class TodoModel(
     val id: Int,
 
@@ -9,4 +11,4 @@ data class TodoModel(
 
     val userId: Int
 )
-
+fun TodoModel.toRequest() = TodoRequest(id, completed, title, userId)
