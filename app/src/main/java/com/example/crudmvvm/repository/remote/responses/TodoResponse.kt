@@ -1,5 +1,6 @@
-package com.example.crudmvvm.model
+package com.example.crudmvvm.repository.remote.responses
 
+import com.example.crudmvvm.model.TodoModel
 import com.google.gson.annotations.SerializedName
 
 data class TodoResponse(

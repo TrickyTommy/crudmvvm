@@ -1,6 +1,6 @@
 package com.example.crudmvvm.repository.clients
 
-import com.example.crudmvvm.repository.services.TodoService
+import com.example.crudmvvm.repository.remote.services.TodoService
 import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

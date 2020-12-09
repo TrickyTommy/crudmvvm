@@ -11,20 +11,19 @@ import androidx.fragment.app.viewModels
 import com.example.crudmvvm.databinding.FragmentTodoBinding
 import com.example.crudmvvm.model.TodoModel
 import com.example.crudmvvm.repository.TodoRepository
-import com.example.crudmvvm.repository.TodoRepositoryImpl
+import com.example.crudmvvm.repository.remote.TodoRepositoryImpl
 import com.example.crudmvvm.repository.clients.TodoClients
-import com.example.crudmvvm.repository.request.TodoRequest
 import com.example.crudmvvm.viewmodels.StatesTodo
 import com.example.crudmvvm.viewmodels.TodoModelFactory
 import com.example.crudmvvm.viewmodels.getTodoViewModel
 import com.example.crudmvvm.views.adapter.TodoAdapter
 
 
-class TodoFragment : Fragment() {
+class TodoFragment : Fragment(), TodoAdapter.TodoListener {
 
     private lateinit var binding: FragmentTodoBinding
 
-    private val adapter by lazy { TodoAdapter(requireContext()) }
+    private val adapter by lazy { TodoAdapter(requireContext(),this) }
     private val service by lazy { TodoClients.service }
     private val remoteRepo: TodoRepository by lazy { TodoRepositoryImpl(service) }
     private val viewModelFactory by lazy { TodoModelFactory(remoteRepo) }
@@ -62,9 +61,17 @@ class TodoFragment : Fragment() {
                     }
                     is StatesTodo.SuccessInsert -> {
                         showLoading(false)
-//                        adapter.insertTodo(it.response)
+                        adapter.insertTodo(it.model)
                         Toast.makeText(requireContext(), "id = ${it.model.id} , berhasil ditambahkan", Toast.LENGTH_SHORT).show()
                         tieTambah.setText("")
+                    }
+                    is StatesTodo.SuccessUpdateTodo -> {
+                        showLoading(false)
+                        adapter.updateTodo(it.todo)
+                    }
+                    is StatesTodo.SuccessDeleteTodo -> {
+                        showLoading(false)
+                        adapter.deleteTodo(it.todo)
                     }
                     else -> throw Exception("Unsupported  state type")
                 }
@@ -81,6 +88,15 @@ class TodoFragment : Fragment() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.pbLoading.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    override fun onChange(todoModel: TodoModel) {
+        todoModel.completed = !todoModel.completed
+        viewModel.updateTodo(todoModel)
+    }
+
+    override fun onDelete(todoModel: TodoModel) {
+        viewModel.deleteTodo(todoModel)
     }
 
 }

@@ -1,13 +1,12 @@
 package com.example.crudmvvm.model
 
-import com.example.crudmvvm.repository.request.TodoRequest
-import com.google.gson.annotations.SerializedName
+import com.example.crudmvvm.repository.remote.request.TodoRequest
 
 data class TodoModel(
 
     val id: Int = 0,
-    val completed: Boolean = false,
-    val title: String ,
+    var completed: Boolean = false,
+    val title: String,
     val userId: Int = 0
 )
 

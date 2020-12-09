@@ -7,7 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.crudmvvm.databinding.TodoItemBinding
 import com.example.crudmvvm.model.TodoModel
 
-class TodoAdapter(private val context: Context) : RecyclerView.Adapter<TodoAdapter.ViewHolder>() {
+class TodoAdapter(private val context: Context, private val listener: TodoListener) :
+    RecyclerView.Adapter<TodoAdapter.ViewHolder>() {
     inner class ViewHolder(val binding: TodoItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bindata(todoModel: TodoModel) {
             binding.run {
@@ -19,10 +20,31 @@ class TodoAdapter(private val context: Context) : RecyclerView.Adapter<TodoAdapt
 
     }
 
-//    fun insertTodo(todoModel: TodoModel){
-//        list.add(0,todoModel)
-//        notifyItemInserted(0)
-//    }
+    fun insertTodo(todoModel: TodoModel) {
+        list.add(0, todoModel)
+        notifyItemInserted(0)
+    }
+
+    fun updateTodo(todoModel: TodoModel) {
+        val index = list.indexOfFirst { it.id == todoModel.id }
+        if (index != -1) {
+            list[index] = todoModel
+            notifyItemChanged(index)
+        }
+    }
+
+    fun deleteTodo(todoModel: TodoModel) {
+        val index = list.indexOfFirst { it.id == todoModel.id }
+        if (index != -1) {
+            list.removeAt(index)
+            notifyItemRemoved(index)
+        }
+    }
+
+    interface TodoListener {
+        fun onChange(todoModel: TodoModel)
+        fun onDelete(todoModel: TodoModel)
+    }
 
 
     var list = mutableListOf<TodoModel>()
@@ -36,9 +58,14 @@ class TodoAdapter(private val context: Context) : RecyclerView.Adapter<TodoAdapt
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindata(list[position])
-    }
+        val model by lazy { list[position] }
+        holder.bindata(model)
+        holder.binding.run {
+            ivTodo.setOnClickListener { listener.onChange(model) }
+            ivStatus.setOnClickListener { listener.onDelete(model) }
+        }
 
-    override fun getItemCount(): Int = list.size
+    }
+        override fun getItemCount(): Int = list.size
 }
 

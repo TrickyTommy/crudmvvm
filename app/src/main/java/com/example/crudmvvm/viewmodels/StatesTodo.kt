@@ -7,5 +7,7 @@ sealed class StatesTodo {
     data class error(val exception: Exception) : StatesTodo()
     data class  SucceseGetTodo(val list: List<TodoModel>): StatesTodo()
     data class SuccessInsert(val model: TodoModel): StatesTodo()
+    data class SuccessUpdateTodo(val todo: TodoModel) : StatesTodo()
+    data class SuccessDeleteTodo(val todo: TodoModel) : StatesTodo()
 
 }

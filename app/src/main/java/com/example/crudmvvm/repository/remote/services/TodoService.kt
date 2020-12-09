@@ -1,8 +1,7 @@
-package com.example.crudmvvm.repository.services
+package com.example.crudmvvm.repository.remote.services
 
-import com.example.crudmvvm.model.TodoModel
-import com.example.crudmvvm.model.TodoResponse
-import com.example.crudmvvm.repository.request.TodoRequest
+import com.example.crudmvvm.repository.remote.request.TodoRequest
+import com.example.crudmvvm.repository.remote.responses.TodoResponse
 import retrofit2.http.*
 
 interface TodoService {
@@ -14,12 +13,12 @@ interface TodoService {
 
     @PUT("v1/todos/{id}")
     suspend fun updateTodoById(
-        @Path("id") id: Long,
+        @Path("id") id: Int,
         @Body todoRequest: TodoRequest
     ): TodoResponse
 
     @DELETE("v1/todos/{id}")
-    suspend fun deleteTodoById(@Path("id") id: Long): TodoResponse
+    suspend fun deleteTodoById(@Path("id") id: Int): TodoResponse
 
 
 }

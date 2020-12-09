@@ -1,4 +1,4 @@
-package com.example.crudmvvm.repository.request
+package com.example.crudmvvm.repository.remote.request
 
 class TodoRequest(
 
