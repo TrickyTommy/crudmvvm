@@ -14,17 +14,15 @@ class TodoAdapter(private val context: Context) : RecyclerView.Adapter<TodoAdapt
                 IdTodo.text = "Id : ${todoModel.id}"
                 tvTittle.text = "Tittle : ${todoModel.title}"
                 tvStatus.text = "Complete ; ${todoModel.completed}"
-
-
             }
         }
 
     }
 
-    fun insertTodo(todoModel: TodoModel){
-        list.add(0,todoModel)
-        notifyItemInserted(0)
-    }
+//    fun insertTodo(todoModel: TodoModel){
+//        list.add(0,todoModel)
+//        notifyItemInserted(0)
+//    }
 
 
     var list = mutableListOf<TodoModel>()

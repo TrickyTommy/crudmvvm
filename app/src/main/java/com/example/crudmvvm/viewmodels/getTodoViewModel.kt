@@ -5,6 +5,7 @@ import com.example.crudmvvm.model.TodoModel
 import com.example.crudmvvm.model.toModel
 import com.example.crudmvvm.model.toRequest
 import com.example.crudmvvm.repository.TodoRepository
+import com.example.crudmvvm.repository.request.TodoRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -28,14 +29,14 @@ class getTodoViewModel (private val repository: TodoRepository): ViewModel(),
             }
         }
     }
-    fun insertTodo(todoModel: TodoModel) {
+    fun insertTodo(model: TodoModel) {
         mutabaleState.value = StatesTodo.Loading()
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val todoResponse = repository.insertTodo(todoModel.toRequest())
-                val todo = todoResponse.toModel()
-                mutabaleState.postValue(StatesTodo.SuccessInsert(todo))
+                val request = repository.insertTodo(model.toRequest())
+                val model = request.toModel()
+                mutabaleState.postValue(StatesTodo.SuccessInsert(model))
             } catch (exc: Exception) {
                 onError(exc)
             }

@@ -13,6 +13,7 @@ import com.example.crudmvvm.model.TodoModel
 import com.example.crudmvvm.repository.TodoRepository
 import com.example.crudmvvm.repository.TodoRepositoryImpl
 import com.example.crudmvvm.repository.clients.TodoClients
+import com.example.crudmvvm.repository.request.TodoRequest
 import com.example.crudmvvm.viewmodels.StatesTodo
 import com.example.crudmvvm.viewmodels.TodoModelFactory
 import com.example.crudmvvm.viewmodels.getTodoViewModel
@@ -36,6 +37,12 @@ class TodoFragment : Fragment() {
         binding = FragmentTodoBinding.inflate(inflater, container, false).apply {
 
             recyclerView.adapter = adapter
+            btnTambah.setOnClickListener {
+                if (tieTambah.text.toString().isNotEmpty()){
+                    viewModel.insertTodo(TodoModel(title = tieTambah.text.toString()))
+                }
+
+            }
 
             viewModel.state.observe(viewLifecycleOwner) {
                 when (it) {
@@ -53,21 +60,13 @@ class TodoFragment : Fragment() {
                         adapter.list = it.list.toMutableList()
 
                     }
-                    is StatesTodo.SuccessInsert ->{
+                    is StatesTodo.SuccessInsert -> {
                         showLoading(false)
-                        adapter.insertTodo(it.todo)
+//                        adapter.insertTodo(it.response)
+                        Toast.makeText(requireContext(), "id = ${it.model.id} , berhasil ditambahkan", Toast.LENGTH_SHORT).show()
                         tieTambah.setText("")
                     }
                     else -> throw Exception("Unsupported  state type")
-                }
-            }
-            btnTambah.setOnClickListener {
-                if(tieTambah.text.toString().isNotEmpty()){
-                    viewModel.insertTodo(
-                        TodoModel(id =
-
-                        )
-                    )
                 }
             }
         }

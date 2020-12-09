@@ -9,7 +9,7 @@ import com.example.crudmvvm.R
 
 
 class addTodoFragment : Fragment() {
-    /
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
