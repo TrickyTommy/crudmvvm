@@ -23,7 +23,7 @@ class TodoFragment : Fragment(), TodoAdapter.TodoListener {
 
     private lateinit var binding: FragmentTodoBinding
 
-    private val adapter by lazy { TodoAdapter(requireContext(),this) }
+    private val adapter by lazy { TodoAdapter(requireContext(), this) }
     private val service by lazy { TodoClients.service }
     private val remoteRepo: TodoRepository by lazy { TodoRepositoryImpl(service) }
     private val viewModelFactory by lazy { TodoModelFactory(remoteRepo) }
@@ -37,7 +37,7 @@ class TodoFragment : Fragment(), TodoAdapter.TodoListener {
 
             recyclerView.adapter = adapter
             btnTambah.setOnClickListener {
-                if (tieTambah.text.toString().isNotEmpty()){
+                if (tieTambah.text.toString().isNotEmpty()) {
                     viewModel.insertTodo(TodoModel(title = tieTambah.text.toString()))
                 }
 
@@ -62,16 +62,25 @@ class TodoFragment : Fragment(), TodoAdapter.TodoListener {
                     is StatesTodo.SuccessInsert -> {
                         showLoading(false)
                         adapter.insertTodo(it.model)
-                        Toast.makeText(requireContext(), "id = ${it.model.id} , berhasil ditambahkan", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            "id = ${it.model.id} , berhasil ditambahkan",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         tieTambah.setText("")
                     }
                     is StatesTodo.SuccessUpdateTodo -> {
                         showLoading(false)
                         adapter.updateTodo(it.todo)
                     }
+//                    is StatesTodo.SuccessDeleteTodo -> {
+//                        showLoading(false)
+//                        adapter.deleteTodo(it.todo)
+//                    }
                     is StatesTodo.SuccessDeleteTodo -> {
                         showLoading(false)
-                        adapter.deleteTodo(it.todo)
+                        adapter.deleteTodo(it.id)
+                        showMesage("${it.id} berhasil dihapus")
                     }
                     else -> throw Exception("Unsupported  state type")
                 }
@@ -95,8 +104,14 @@ class TodoFragment : Fragment(), TodoAdapter.TodoListener {
         viewModel.updateTodo(todoModel)
     }
 
-    override fun onDelete(todoModel: TodoModel) {
-        viewModel.deleteTodo(todoModel)
+    private fun showMesage(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
+
+
+    override fun onDelete(model: TodoModel) {
+        viewModel.deleteTodo(model)
+    }
+
 
 }

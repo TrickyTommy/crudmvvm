@@ -11,13 +11,13 @@ interface TodoService {
     @POST("todos")
     suspend fun insertTodo(@Body todoRequest: TodoRequest): TodoResponse
 
-    @PUT("v1/todos/{id}")
+    @PUT("todos/{id}")
     suspend fun updateTodoById(
         @Path("id") id: Int,
         @Body todoRequest: TodoRequest
     ): TodoResponse
 
-    @DELETE("v1/todos/{id}")
+    @DELETE("todos/{id}")
     suspend fun deleteTodoById(@Path("id") id: Int): TodoResponse
 
 

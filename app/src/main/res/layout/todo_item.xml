@@ -39,19 +39,18 @@
         app:layout_constraintEnd_toEndOf="@+id/tv_tittle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_tittle" />
+
     <ImageView
-        android:id="@+id/iv_todo"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
+        android:id="@+id/ivdelete"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:padding="8dp"
-        android:src="@drawable/ic_subtract" />
+        android:src="@drawable/ic_baseline_delete_forever_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
     <ImageView
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_todo"
+        app:layout_constraintTop_toBottomOf="@id/ivdelete"
         android:id="@+id/iv_status"
         android:layout_width="48dp"
         android:layout_height="48dp"

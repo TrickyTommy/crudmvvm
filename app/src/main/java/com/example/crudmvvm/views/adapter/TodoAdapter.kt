@@ -29,12 +29,13 @@ class TodoAdapter(private val context: Context, private val listener: TodoListen
         val index = list.indexOfFirst { it.id == todoModel.id }
         if (index != -1) {
             list[index] = todoModel
+         print("sadasd")
             notifyItemChanged(index)
         }
     }
 
-    fun deleteTodo(todoModel: TodoModel) {
-        val index = list.indexOfFirst { it.id == todoModel.id }
+    fun deleteTodo(id: Int) {
+        val index = list.indexOfFirst { it.id == id }
         if (index != -1) {
             list.removeAt(index)
             notifyItemRemoved(index)
@@ -61,8 +62,8 @@ class TodoAdapter(private val context: Context, private val listener: TodoListen
         val model by lazy { list[position] }
         holder.bindata(model)
         holder.binding.run {
-            ivTodo.setOnClickListener { listener.onChange(model) }
-            ivStatus.setOnClickListener { listener.onDelete(model) }
+            ivdelete.setOnClickListener { listener.onDelete(model) }
+            ivStatus.setOnClickListener { listener.onChange(model) }
         }
 
     }

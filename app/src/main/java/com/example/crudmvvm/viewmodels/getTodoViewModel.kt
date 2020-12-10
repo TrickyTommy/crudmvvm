@@ -9,25 +9,26 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class getTodoViewModel (private val repository: TodoRepository): ViewModel(),
+class getTodoViewModel(private val repository: TodoRepository) : ViewModel(),
     ViewModelProvider.Factory {
-    private  val mutabaleState by lazy { MutableLiveData<StatesTodo>() }
+    private val mutabaleState by lazy { MutableLiveData<StatesTodo>() }
     val state: LiveData<StatesTodo> get() = mutabaleState
 
-    fun getAllTodo(){
+    fun getAllTodo() {
         mutabaleState.value = StatesTodo.Loading()
 
-        viewModelScope.launch (Dispatchers.IO){
+        viewModelScope.launch(Dispatchers.IO) {
             try {
-                val todorespon =  repository.getAllTodo().asSequence().map { it.toModel() }.toList()
+                val todorespon = repository.getAllTodo().asSequence().map { it.toModel() }.toList()
                 mutabaleState.postValue(StatesTodo.SucceseGetTodo(todorespon))
 
 
-            }catch (ex:Exception){
+            } catch (ex: Exception) {
                 onError(ex)
             }
         }
     }
+
     fun insertTodo(model: TodoModel) {
         mutabaleState.value = StatesTodo.Loading()
 
@@ -41,6 +42,7 @@ class getTodoViewModel (private val repository: TodoRepository): ViewModel(),
             }
         }
     }
+
     fun updateTodo(todoModel: TodoModel) {
         mutabaleState.value = StatesTodo.Loading()
 
@@ -55,19 +57,30 @@ class getTodoViewModel (private val repository: TodoRepository): ViewModel(),
         }
     }
 
-    fun deleteTodo(todoModel: TodoModel) {
+    //    fun deleteTodo(todoModel: TodoModel) {
+//        mutabaleState.value = StatesTodo.Loading()
+//
+//        viewModelScope.launch(Dispatchers.IO) {
+//            try {
+//                val todoResponse = repository.deleteTodo(todoModel.id)
+//                val model = todoResponse.toModel()
+//                mutabaleState.postValue(StatesTodo.SuccessDeleteTodo(model))
+//            } catch (exc: Exception) {
+//                onError(exc)
+//            }
+//        }
+//    }
+    fun deleteTodo(model: TodoModel) {
         mutabaleState.value = StatesTodo.Loading()
-
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val todoResponse = repository.deleteTodo(todoModel.id)
-                val model = todoResponse.toModel()
-                mutabaleState.postValue(StatesTodo.SuccessDeleteTodo(model))
+                mutabaleState.postValue(StatesTodo.SuccessDeleteTodo(model.id))
             } catch (exc: Exception) {
-                onError(exc)
+
             }
         }
     }
+
 
     private fun onError(ex: Exception) {
         ex.printStackTrace()
@@ -76,6 +89,6 @@ class getTodoViewModel (private val repository: TodoRepository): ViewModel(),
     }
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-       return getTodoViewModel(repository)as T
+        return getTodoViewModel(repository) as T
     }
 }

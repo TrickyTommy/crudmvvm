@@ -10,4 +10,4 @@ data class TodoModel(
     val userId: Int = 0
 )
 
-fun TodoModel.toRequest() = TodoRequest(completed, title)
+fun TodoModel.toRequest() = TodoRequest(id, completed, title)
