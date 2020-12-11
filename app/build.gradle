@@ -73,7 +73,12 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+// Koin for Kotlin apps
+    implementation "org.koin:koin-core:$koin_version"
+    // Testing
+    implementation "org.koin:koin-test:$koin_version"
 
+    implementation "org.koin:koin-android-viewmodel:$koin_version"
 
 
 

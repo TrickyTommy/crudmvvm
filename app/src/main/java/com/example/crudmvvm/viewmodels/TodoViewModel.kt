@@ -9,7 +9,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class getTodoViewModel(private val repository: TodoRepository) : ViewModel(),
+@Suppress("UNCHECKED_CAST")
+class TodoViewModel(private val repository: TodoRepository) : ViewModel(),
     ViewModelProvider.Factory {
     private val mutabaleState by lazy { MutableLiveData<StatesTodo>() }
     val state: LiveData<StatesTodo> get() = mutabaleState
@@ -29,12 +30,12 @@ class getTodoViewModel(private val repository: TodoRepository) : ViewModel(),
         }
     }
 
-    fun insertTodo(model: TodoModel) {
+    fun insertTodo(todoModel: TodoModel) {
         mutabaleState.value = StatesTodo.Loading()
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val request = repository.insertTodo(model.toRequest())
+                val request = repository.insertTodo(todoModel.toRequest())
                 val model = request.toModel()
                 mutabaleState.postValue(StatesTodo.SuccessInsert(model))
             } catch (exc: Exception) {
@@ -89,6 +90,6 @@ class getTodoViewModel(private val repository: TodoRepository) : ViewModel(),
     }
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return getTodoViewModel(repository) as T
+        return TodoViewModel(repository) as T
     }
 }

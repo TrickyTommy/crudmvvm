@@ -29,7 +29,6 @@ class TodoAdapter(private val context: Context, private val listener: TodoListen
         val index = list.indexOfFirst { it.id == todoModel.id }
         if (index != -1) {
             list[index] = todoModel
-         print("sadasd")
             notifyItemChanged(index)
         }
     }
@@ -67,6 +66,7 @@ class TodoAdapter(private val context: Context, private val listener: TodoListen
         }
 
     }
-        override fun getItemCount(): Int = list.size
+
+    override fun getItemCount(): Int = list.size
 }
 

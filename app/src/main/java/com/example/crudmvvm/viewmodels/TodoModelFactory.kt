@@ -7,7 +7,7 @@ import com.example.crudmvvm.repository.TodoRepository
 class TodoModelFactory(private val factoryrepo: TodoRepository) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return getTodoViewModel(factoryrepo) as T
+        return TodoViewModel(factoryrepo) as T
     }
 //    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
 //        return TodoModelFactory(factoryrepo) as T

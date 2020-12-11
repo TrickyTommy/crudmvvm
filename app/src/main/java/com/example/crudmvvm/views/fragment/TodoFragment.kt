@@ -7,16 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import com.example.crudmvvm.databinding.FragmentTodoBinding
 import com.example.crudmvvm.model.TodoModel
-import com.example.crudmvvm.repository.TodoRepository
-import com.example.crudmvvm.repository.remote.TodoRepositoryImpl
-import com.example.crudmvvm.repository.clients.TodoClients
 import com.example.crudmvvm.viewmodels.StatesTodo
-import com.example.crudmvvm.viewmodels.TodoModelFactory
-import com.example.crudmvvm.viewmodels.getTodoViewModel
+import com.example.crudmvvm.viewmodels.TodoViewModel
 import com.example.crudmvvm.views.adapter.TodoAdapter
+import org.koin.android.viewmodel.ext.android.viewModel
 
 
 class TodoFragment : Fragment(), TodoAdapter.TodoListener {
@@ -24,10 +20,10 @@ class TodoFragment : Fragment(), TodoAdapter.TodoListener {
     private lateinit var binding: FragmentTodoBinding
 
     private val adapter by lazy { TodoAdapter(requireContext(), this) }
-    private val service by lazy { TodoClients.service }
-    private val remoteRepo: TodoRepository by lazy { TodoRepositoryImpl(service) }
-    private val viewModelFactory by lazy { TodoModelFactory(remoteRepo) }
-    private val viewModel by viewModels<getTodoViewModel> { viewModelFactory }
+//    private val service by lazy { TodoClients.service }
+//    private val remoteRepo: TodoRepository by lazy { TodoRepositoryImpl(service) }
+//    private val viewModelFactory by lazy { TodoModelFactory(remoteRepo) }
+    private val viewModel by viewModel<TodoViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,11 +34,14 @@ class TodoFragment : Fragment(), TodoAdapter.TodoListener {
             recyclerView.adapter = adapter
             btnTambah.setOnClickListener {
                 if (tieTambah.text.toString().isNotEmpty()) {
-                    viewModel.insertTodo(TodoModel(title = tieTambah.text.toString()))
+                    viewModel.insertTodo(
+                        TodoModel(
+                            title = tieTambah.text.toString()
+                        )
+                    )
                 }
 
             }
-
             viewModel.state.observe(viewLifecycleOwner) {
                 when (it) {
                     is StatesTodo.Loading -> showLoading(true)
@@ -109,8 +108,8 @@ class TodoFragment : Fragment(), TodoAdapter.TodoListener {
     }
 
 
-    override fun onDelete(model: TodoModel) {
-        viewModel.deleteTodo(model)
+    override fun onDelete(todoModel: TodoModel) {
+        viewModel.deleteTodo(todoModel)
     }
 
 
